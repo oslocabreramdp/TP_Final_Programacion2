@@ -8,14 +8,14 @@ public class Departamento extends Propiedad{
     private String numeroDpto;
     private int piso;
     private double montoExpensa;
-    private boolean acensor;
+    private boolean ascensor;
 
     public Departamento(String titulo, String descripcion, String direccionCalle, int direccionNumero, String localidad, double precio, Moneda moneda, TipoOperacion tipoOperacion, int ambientes, int dormitorios, boolean balcon, int banios, boolean cochera, int anioConstruccion, double superficieTotal, double superficieDescubierta, double superficieCubierta, Cliente propietario, boolean aptoCredito, String numeroDpto, int piso, double montoExpensa, boolean acensor) {
         super(titulo, descripcion, direccionCalle, direccionNumero, localidad, precio, moneda, tipoOperacion, ambientes, dormitorios, balcon, banios, cochera, anioConstruccion, superficieTotal, superficieDescubierta, superficieCubierta, propietario, aptoCredito);
         this.numeroDpto = numeroDpto;
         this.piso = piso;
         this.montoExpensa = montoExpensa;
-        this.acensor = acensor;
+        this.ascensor = acensor;
     }
 
     public String getNumeroDpto() {
@@ -43,11 +43,11 @@ public class Departamento extends Propiedad{
     }
 
     public boolean isAcensor() {
-        return acensor;
+        return ascensor;
     }
 
     public void setAcensor(boolean acensor) {
-        this.acensor = acensor;
+        this.ascensor = acensor;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class Departamento extends Propiedad{
                 "numeroDpto='" + numeroDpto + '\'' +
                 ", piso=" + piso +
                 ", montoExpensa=" + montoExpensa +
-                ", acensor=" + acensor +
+                ", acensor=" + ascensor +
                 "} " + super.toString();
     }
 }

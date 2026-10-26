@@ -1,5 +1,5 @@
 package Enums;
 
 public enum Moneda {
-    AR$, USD
+    ARS, USD
 }

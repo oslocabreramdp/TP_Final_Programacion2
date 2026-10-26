@@ -2,14 +2,14 @@ package Modelo;
 import Enums.EstadoPropiedad;
 import Enums.Moneda;
 import Enums.TipoOperacion;
+import Enums.TipoPropiedad;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
 public abstract class Propiedad {
-    private String id;
-    private static int contador = 1;
-    private static final String LETRA  = "B";
+    private int id;
+    private TipoPropiedad tipoPropiedad;
     private String titulo;
     private String descripcion;
     private String direccionCalle;
@@ -36,7 +36,6 @@ public abstract class Propiedad {
     //constructor
     public Propiedad(String titulo, String descripcion, String direccionCalle, int direccionNumero, String localidad, double precio, Moneda moneda, TipoOperacion tipoOperacion,
                      int ambientes, int dormitorios, boolean balcon, int banios, boolean cochera, int anioConstruccion, double superficieTotal,double superficieDescubierta , double superficieCubierta, Cliente propietario, boolean aptoCredito) {
-        this.id =  LETRA + contador ++;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.direccionCalle = direccionCalle;
@@ -61,12 +60,16 @@ public abstract class Propiedad {
         this.ocupacion = false;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public TipoPropiedad getTipoPropiedad() {
+        return tipoPropiedad;
+    }
+
+    public void setTipoPropiedad(TipoPropiedad tipoPropiedad) {
+        this.tipoPropiedad = tipoPropiedad;
     }
 
     public String getTitulo() {

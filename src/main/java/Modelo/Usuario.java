@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public abstract class Usuario {
 
-    private static int contador=1;
+
 
     private int idUsuario;
     private TipoUsuario rol;
@@ -19,7 +19,6 @@ public abstract class Usuario {
     private LocalDate fechaAlta;
 
     public Usuario(TipoUsuario tipoUsuario, String nombre, String apellido, String telefono, String email, String contraseniaHash) {
-        this.idUsuario=contador++;
         this.rol = tipoUsuario;
         this.nombre = nombre;
         this.apellido = apellido;
