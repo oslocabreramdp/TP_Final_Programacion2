@@ -1,5 +1,5 @@
 package Enums;
 
-public enum EstadoPropiedad {
+public enum EstadoPublicacion {
     VENDIDA, NO_DISPONIBLE, TASACION, DISPONIBLE, RESERVADA,
 }

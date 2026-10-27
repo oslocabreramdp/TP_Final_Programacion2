@@ -1,4 +1,5 @@
 package Enums;
 
-public enum TipoUsuario {ADMINISTRADOR,CLIENTE,PRODUCTOR_DE_VENTA
+public enum TipoUsuario {
+    ADMINISTRADOR,CLIENTE,PRODUCTOR_DE_VENTA
 }

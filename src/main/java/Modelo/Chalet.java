@@ -1,6 +1,6 @@
 package Modelo;
 
-import Enums.Moneda;
+import Enums.EstadoConservacion;
 import Enums.TipoOperacion;
 
 public class Chalet extends Propiedad{
@@ -8,12 +8,22 @@ public class Chalet extends Propiedad{
     private  int cantPisos;
     private  boolean pileta;
     private boolean quincho;
+    private boolean aptoCredito;
 
-    public Chalet(String titulo, String descripcion, String direccionCalle, int direccionNumero, String localidad, double precio, Moneda moneda, TipoOperacion tipoOperacion, int ambientes, int dormitorios, boolean balcon, int banios, boolean cochera, int anioConstruccion, double superficieTotal, double superficieDescubierta, double superficieCubierta, Cliente propietario, boolean aptoCredito, int cantPisos, boolean pileta, boolean quincho) {
-        super(titulo, descripcion, direccionCalle, direccionNumero, localidad, precio, moneda, tipoOperacion, ambientes, dormitorios, balcon, banios, cochera, anioConstruccion, superficieTotal, superficieDescubierta, superficieCubierta, propietario, aptoCredito);
+    public Chalet(String titulo, String descripcion, String direccionCalle, int direccionNumero, String localidad, int precio, TipoOperacion tipoOperacion, int ambientes, int dormitorios, boolean balcon, int banios, boolean cochera, int anioConstruccion, double superficieTotal, double superficieDescubierta, double superficieCubierta, Cliente propietario, boolean aptoCredito, EstadoConservacion estadoConservacion, int cantPisos, boolean pileta, boolean quincho) {
+        super(titulo, descripcion, direccionCalle, direccionNumero, localidad, precio, tipoOperacion, ambientes, dormitorios, balcon, banios, cochera, anioConstruccion, superficieTotal, superficieDescubierta, superficieCubierta, propietario, estadoConservacion);
         this.cantPisos = cantPisos;
         this.pileta = pileta;
         this.quincho = quincho;
+        this.aptoCredito = aptoCredito;
+    }
+
+    public boolean isAptoCredito() {
+        return aptoCredito;
+    }
+
+    public void setAptoCredito(boolean aptoCredito) {
+        this.aptoCredito = aptoCredito;
     }
 
     public int getCantPisos() {
@@ -41,11 +51,17 @@ public class Chalet extends Propiedad{
     }
 
     @Override
+    public double calularPrecioFinal() {
+        return 0;
+    }
+
+    @Override
     public String toString() {
         return "Chalet{" +
                 "cantPisos=" + cantPisos +
                 ", pileta=" + pileta +
                 ", quincho=" + quincho +
+                ", aptoCredito=" + aptoCredito +
                 "} " + super.toString();
     }
 }
