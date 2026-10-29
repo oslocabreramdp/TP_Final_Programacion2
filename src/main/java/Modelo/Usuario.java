@@ -18,16 +18,28 @@ public abstract class Usuario {
     private boolean activo;
     private LocalDate fechaAlta;
 
-    public Usuario(TipoUsuario tipoUsuario, String nombre, String apellido, String telefono, String email, String contraseniaHash) {
-        this.rol = tipoUsuario;
+    public Usuario(int idUsuario, TipoUsuario rol, String nombre, String apellido, String telefono, String email, String contraseniaHash, boolean activo, LocalDate fechaAlta) {
+        this.idUsuario = idUsuario;
+        this.rol = rol;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
         this.email = email;
         this.contraseniaHash = contraseniaHash;
-        this.activo = true;
-        this.fechaAlta = LocalDate.now();
-    };
+        this.activo = activo;
+        this.fechaAlta = fechaAlta;
+    }
+
+    public Usuario(TipoUsuario rol, String nombre, String apellido, String telefono, String email, String contraseniaHash, boolean activo, LocalDate fechaAlta) {
+        this.rol = rol;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.telefono = telefono;
+        this.email = email;
+        this.contraseniaHash = contraseniaHash;
+        this.activo = activo;
+        this.fechaAlta = fechaAlta;
+    }
 
     public TipoUsuario getRol() {
         return rol;
@@ -93,7 +105,7 @@ public abstract class Usuario {
         this.fechaAlta = fechaAlta;
     }
 
-    public int getIdUsuario() {
+    public int getId() {
         return idUsuario;
     }
 
@@ -101,11 +113,12 @@ public abstract class Usuario {
     public String toString() {
         return "Usuario{" +
                 "idUsuario=" + idUsuario +
-                ", tipoUsuario=" + rol +
+                ", rol=" + rol +
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
                 ", telefono='" + telefono + '\'' +
                 ", email='" + email + '\'' +
+                ", contraseniaHash='" + contraseniaHash + '\'' +
                 ", activo=" + activo +
                 ", fechaAlta=" + fechaAlta +
                 '}';
@@ -121,11 +134,6 @@ public abstract class Usuario {
     public int hashCode() {
         return Objects.hashCode(email);
     }
-
-    public abstract void cambiarContrasenia(String nuevaContrasenia);
-
-
-
 
 
 }
