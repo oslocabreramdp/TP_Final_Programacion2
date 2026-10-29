@@ -1,8 +1,7 @@
 package Enums;
 
-
 public enum EstadoConservacion {
-    EXCELENTE(15), MUY_BUENO(0), BUENO(-5), A_RECICLAR(-10);
+    EXCELENTE(15), MUY_BUENO(0), BUENO(-5), A_RECICLAR(-10), NADA(0);
 
     private final int porcentaje;
 
