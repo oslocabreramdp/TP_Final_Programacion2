@@ -4,7 +4,6 @@ import Enums.Disposicion;
 import Enums.EstadoConservacion;
 import Enums.TipoOperacion;
 
-import java.time.LocalDate;
 
 public class Departamento extends Propiedad{
 
@@ -84,27 +83,11 @@ public class Departamento extends Propiedad{
     }
 
     @Override
-    public double calularPrecioFinal() {
+    public double calcularPrecioFinal() {
         double precio_base_zona = calcularPrecioPorZona();
-        int porcentajeTotal = 0;
+        // Estado de conservacion, antiguedad y ambientes (metodo comun en Propiedad)
+        int porcentajeTotal = calcularPorcentajeComun();
 
-        //viene del enum el numero
-        porcentajeTotal += getEstadoConservacion().getPorcentaje();
-
-       // Antigüedad reta 1% por año pasados los 10, tope -30. No aplica si es A_RECICLAR
-        int antiguedad = LocalDate.now().getYear() - getAnioConstruccion();
-        if (antiguedad > 10 && getEstadoConservacion() != EstadoConservacion.A_RECICLAR) {
-            int descuento = antiguedad - 10;
-            if (descuento > 30) {
-                descuento = 30;
-            }
-            porcentajeTotal -= descuento;
-        }
-
-        // Ambientes por cada amb u 2%
-        if (getAmbientes() > 1) {
-            porcentajeTotal += (getAmbientes() - 1) * 2;
-        }
 
         if (isCochera()) {
             porcentajeTotal += 10;

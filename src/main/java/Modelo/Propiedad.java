@@ -260,7 +260,34 @@ public abstract class Propiedad {
         return  precio_base_zona;
     }
 
-    public abstract double calularPrecioFinal();
+
+    // Porcentaje que comparten todas las propiedades:
+    // estado de conservacion, antiguedad y ambientes.
+    protected int calcularPorcentajeComun() {
+        int porcentaje = 0;
+
+        //viene del enum el numero
+        porcentaje += getEstadoConservacion().getPorcentaje();
+
+        // Antigüedad resta 1% por año pasados los 10, tope -30. No aplica si es A_RECICLAR
+        int antiguedad = LocalDate.now().getYear() - getAnioConstruccion();
+        if (antiguedad > 10 && getEstadoConservacion() != EstadoConservacion.A_RECICLAR) {
+            int descuento = antiguedad - 10;
+            if (descuento > 30) {
+                descuento = 30;
+            }
+            porcentaje -= descuento;
+        }
+
+        // Ambientes 2% por cada ambiente despues del primero
+        if (getAmbientes() > 1) {
+            porcentaje += (getAmbientes() - 1) * 2;
+        }
+
+        return porcentaje;
+    }
+
+    public abstract double calcularPrecioFinal();
 
     @Override
     public boolean equals(Object o) {
