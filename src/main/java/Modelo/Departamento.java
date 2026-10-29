@@ -2,26 +2,34 @@ package Modelo;
 
 import Enums.Disposicion;
 import Enums.EstadoConservacion;
-import Enums.TipoOperacion;
+import Enums.TipoPropiedad;
+import Enums.Zona;
 
 
 public class Departamento extends Propiedad{
 
     private String numeroDpto;
     private int piso;
-    private int montoExpensa;
     private boolean ascensor;
-    private boolean suite;
     private boolean vistaAlMar;
     private Disposicion disposicion;
 
-    public Departamento(String titulo, String descripcion, String direccionCalle, int direccionNumero, String localidad, int precio, TipoOperacion tipoOperacion, int ambientes, int dormitorios, boolean balcon, int banios, boolean cochera, int anioConstruccion, double superficieTotal, double superficieDescubierta, double superficieCubierta, Cliente propietario, EstadoConservacion estadoConservacion, String numeroDpto, int piso, int montoExpensa, boolean acensor, boolean suite, boolean vistaAlMar, Disposicion disposicion) {
-        super(titulo, descripcion, direccionCalle, direccionNumero, localidad, precio, tipoOperacion, ambientes, dormitorios, balcon, banios, cochera, anioConstruccion, superficieTotal, superficieDescubierta, superficieCubierta, propietario, estadoConservacion);
+
+    public Departamento(Zona zona, int direccionNumero, String direccionCalle, TipoPropiedad tipoPropiedad) {
+        super(zona, direccionNumero, direccionCalle, tipoPropiedad);
+        this.numeroDpto = "";
+        this.piso = 0;
+        this.ascensor = false;
+        this.vistaAlMar = false;
+        this.disposicion = Disposicion.NINGUNA;
+    }
+
+    public Departamento(TipoPropiedad tipoPropiedad, String descripcion, Zona zona, String direccionCalle, int direccionNumero, boolean balcon, int ambientes, int banios, boolean cochera, int anioConstruccion,
+                        EstadoConservacion estadoConservacion, double terreno, double superficieCubierta, String numeroDpto, int piso, int montoExpensa, boolean ascensor, boolean suite, boolean vistaAlMar, Disposicion disposicion) {
+        super(tipoPropiedad, descripcion, zona, direccionCalle, direccionNumero, balcon, ambientes, banios, cochera, anioConstruccion, estadoConservacion, terreno, superficieCubierta);
         this.numeroDpto = numeroDpto;
         this.piso = piso;
-        this.montoExpensa = montoExpensa;
-        this.ascensor = acensor;
-        this.suite = suite;
+        this.ascensor = ascensor;
         this.vistaAlMar = vistaAlMar;
         this.disposicion = disposicion;
     }
@@ -50,28 +58,12 @@ public class Departamento extends Propiedad{
         this.piso = piso;
     }
 
-    public int getMontoExpensa() {
-        return montoExpensa;
-    }
-
-    public void setMontoExpensa(int montoExpensa) {
-        this.montoExpensa = montoExpensa;
-    }
-
     public boolean isAcensor() {
         return ascensor;
     }
 
     public void setAcensor(boolean acensor) {
         this.ascensor = acensor;
-    }
-
-    public boolean isSuite() {
-        return suite;
-    }
-
-    public void setSuite(boolean suite) {
-        this.suite = suite;
     }
 
     public boolean isVistaAlMar() {
@@ -87,42 +79,26 @@ public class Departamento extends Propiedad{
         double precio_base_zona = calcularPrecioPorZona();
         // Estado de conservacion, antiguedad y ambientes (metodo comun en Propiedad)
         int porcentajeTotal = calcularPorcentajeComun();
-
-
         if (isCochera()) {
             porcentajeTotal += 10;
         }
-
         if (isAcensor()) {
             porcentajeTotal += 5;
         } else {
             porcentajeTotal -= 5;
         }
-
         if (isBalcon()) {
             porcentajeTotal += 3;
         }
-
-        if (isSuite()) {
-            porcentajeTotal += 3;
-        }
-
         if (isVistaAlMar()) {
             porcentajeTotal += 10;
         }
-
         if (disposicion == Disposicion.FRENTE) {
             porcentajeTotal += 5;
         } else if (disposicion == Disposicion.INTERNO) {
             porcentajeTotal -= 5;
         }
-
         double precioFinal = precio_base_zona * (1 + porcentajeTotal / 100.0);
-
-        // Mínimo 30.000 no puede haber un depto mas barato que eso
-        if (precioFinal < 30000) {
-            precioFinal = 30000;
-        }
 
         return precioFinal;
     }
@@ -133,9 +109,7 @@ public class Departamento extends Propiedad{
         return "Departamento{" +
                 "numeroDpto='" + numeroDpto + '\'' +
                 ", piso=" + piso +
-                ", montoExpensa=" + montoExpensa +
                 ", acensor=" + ascensor +
-                ", suite=" + suite +
                 ", vistaAlMar=" + vistaAlMar +
                 "} " + super.toString();
     }

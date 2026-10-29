@@ -1,24 +1,32 @@
 package Modelo;
-
-import Enums.Disposicion;
 import Enums.EstadoConservacion;
-import Enums.TipoOperacion;
-
+import Enums.TipoPropiedad;
+import Enums.Zona;
 
 public class Chalet extends Propiedad{
 
     private  int cantPisos;
     private  boolean pileta;
     private boolean quincho;
-    private boolean aptoCredito;
     private boolean jardin;
 
-    public Chalet(String titulo, String descripcion, String direccionCalle, int direccionNumero, String localidad, int precio, TipoOperacion tipoOperacion, int ambientes, int dormitorios, boolean balcon, int banios, boolean cochera, int anioConstruccion, double superficieTotal, double superficieDescubierta, double superficieCubierta, Cliente propietario, EstadoConservacion estadoConservacion, int cantPisos, boolean pileta, boolean quincho, boolean aptoCredito, boolean jardin) {
-        super(titulo, descripcion, direccionCalle, direccionNumero, localidad, precio, tipoOperacion, ambientes, dormitorios, balcon, banios, cochera, anioConstruccion, superficieTotal, superficieDescubierta, superficieCubierta, propietario, estadoConservacion);
+
+    public Chalet(Zona zona, int direccionNumero, String direccionCalle, TipoPropiedad tipoPropiedad) {
+        super(zona, direccionNumero, direccionCalle, tipoPropiedad);
+        this.cantPisos = 1;
+        this.pileta = false;
+        this.quincho = false;
+        this.jardin = false;
+    }
+
+    public Chalet(TipoPropiedad tipoPropiedad, String descripcion, Zona zona, String direccionCalle, int direccionNumero,
+                  boolean balcon, int ambientes, int banios, boolean cochera, int anioConstruccion,
+                  EstadoConservacion estadoConservacion, double terreno, double superficieCubierta, int cantPisos,
+                  boolean pileta, boolean quincho, boolean jardin) {
+        super(tipoPropiedad, descripcion, zona, direccionCalle, direccionNumero, balcon, ambientes, banios, cochera, anioConstruccion, estadoConservacion, terreno, superficieCubierta);
         this.cantPisos = cantPisos;
         this.pileta = pileta;
         this.quincho = quincho;
-        this.aptoCredito = aptoCredito;
         this.jardin = jardin;
     }
 
@@ -28,14 +36,6 @@ public class Chalet extends Propiedad{
 
     public void setJardin(boolean jardin) {
         this.jardin = jardin;
-    }
-
-    public boolean isAptoCredito() {
-        return aptoCredito;
-    }
-
-    public void setAptoCredito(boolean aptoCredito) {
-        this.aptoCredito = aptoCredito;
     }
 
     public int getCantPisos() {
@@ -77,9 +77,6 @@ public class Chalet extends Propiedad{
         if (isQuincho()) {
             porcentajeTotal += 5;
         }
-        if (isAptoCredito()) {
-            porcentajeTotal += 5;
-        }
 
         if (getCantPisos() > 1) {
             porcentajeTotal += (getCantPisos() - 1) * 3;
@@ -90,11 +87,6 @@ public class Chalet extends Propiedad{
 
         double precioFinal = precio_base_zona * (1 + porcentajeTotal / 100.0);
 
-        // Mínimo 50.000 no puede haber un depto mas barato que eso
-        if (precioFinal < 50000) {
-            precioFinal = 50000;
-        }
-
         return precioFinal;
     }
 
@@ -104,7 +96,6 @@ public class Chalet extends Propiedad{
                 "cantPisos=" + cantPisos +
                 ", pileta=" + pileta +
                 ", quincho=" + quincho + ", jardin=" + jardin +
-                ", aptoCredito=" + aptoCredito +
                 "} " + super.toString();
     }
 }

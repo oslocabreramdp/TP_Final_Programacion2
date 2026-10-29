@@ -1,7 +1,6 @@
 package Modelo;
 import Enums.EstadoConservacion;
 import Enums.EstadoPublicacion;
-import Enums.TipoOperacion;
 import Enums.TipoPropiedad;
 import Enums.Zona;
 
@@ -11,56 +10,65 @@ import java.util.Objects;
 public abstract class Propiedad {
     private int id;
     private TipoPropiedad tipoPropiedad;
-    private static int contador = 1;
-    private String titulo;
     private String descripcion;
     private Zona zona;
     private String direccionCalle;
     private int direccionNumero;
-    private String localidad;
     private int precio;
     private boolean balcon;
-    private TipoOperacion tipoOperacion;
     private int ambientes;
     private int dormitorios;
     private int banios;
     private boolean cochera;
     private int anioConstruccion;
     private LocalDate fechaPublicacion;
-    private Cliente propietario;
     private EstadoPublicacion estado;
     private EstadoConservacion estadoConservacion;
-    private double superficieTotal;
-    private double superficieDescubierta;
+    private double terreno;
     private double superficieCubierta;
-    private boolean ocupacion;
 
-    //constructor
-    public Propiedad(String titulo, String descripcion, String direccionCalle, int direccionNumero, String localidad, int precio, TipoOperacion tipoOperacion,
-                     int ambientes, int dormitorios, boolean balcon, int banios, boolean cochera, int anioConstruccion, double superficieTotal,double superficieDescubierta , double superficieCubierta, Cliente propietario, EstadoConservacion estadoConservacion) {
-        this.id = contador ++;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
+    //constructores
+    public Propiedad(Zona zona, int direccionNumero, String direccionCalle, TipoPropiedad tipoPropiedad) {
+
+        this.tipoPropiedad = tipoPropiedad;
+        this.descripcion = " ";
+        this.zona = zona;
         this.direccionCalle = direccionCalle;
         this.direccionNumero = direccionNumero;
-        this.localidad = localidad;
-        this.precio = precio;
+        this.balcon = false;
+        this.ambientes = 1;
+        this.banios = 1;
+        this.cochera = false;
+        this.anioConstruccion = 0;
+        this.fechaPublicacion = LocalDate.now();
+        this.estado = EstadoPublicacion.TASACION;
+        this.estadoConservacion = EstadoConservacion.NADA;
+        this.terreno = 0;
+        this.superficieCubierta = 0;
+        this.precio = (int) calcularPrecioFinal();
+    }
+
+    public Propiedad(TipoPropiedad tipoPropiedad, String descripcion, Zona zona, String direccionCalle, int direccionNumero, boolean balcon, int ambientes, int banios,
+                     boolean cochera, int anioConstruccion, EstadoConservacion estadoConservacion, double terreno, double superficieCubierta) {
+        this.id = id;
+        this.tipoPropiedad = tipoPropiedad;
+        this.descripcion = descripcion;
+        this.zona = zona;
+        this.direccionCalle = direccionCalle;
+        this.direccionNumero = direccionNumero;
         this.balcon = balcon;
-        this.tipoOperacion = tipoOperacion;
         this.ambientes = ambientes;
-        this.dormitorios = dormitorios;
         this.banios = banios;
         this.cochera = cochera;
         this.anioConstruccion = anioConstruccion;
-        this.superficieTotal = superficieTotal;
-        this.superficieDescubierta = superficieDescubierta;
-        this.superficieCubierta= superficieCubierta;
-        this.propietario = propietario;
-        this.estadoConservacion = estadoConservacion;
         this.fechaPublicacion = LocalDate.now();
         this.estado = EstadoPublicacion.TASACION;
-        this.ocupacion = false;
+        this.estadoConservacion = estadoConservacion;
+        this.terreno = terreno;
+        this.superficieCubierta = superficieCubierta;
+        this.precio = (int) calcularPrecioFinal();
     }
+
 
     public int getId() {
         return id;
@@ -86,10 +94,6 @@ public abstract class Propiedad {
         this.zona = zona;
     }
 
-    public String getTitulo() {
-        return titulo;
-    }
-
     public boolean isBalcon() {
         return balcon;
     }
@@ -98,9 +102,6 @@ public abstract class Propiedad {
         this.balcon = balcon;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
 
     public String getDescripcion() {
         return descripcion;
@@ -126,28 +127,12 @@ public abstract class Propiedad {
         this.direccionNumero = direccionNumero;
     }
 
-    public String getLocalidad() {
-        return localidad;
-    }
-
-    public void setLocalidad(String localidad) {
-        this.localidad = localidad;
-    }
-
     public int getPrecio() {
         return precio;
     }
 
     public void setPrecio(int precio) {
         this.precio = precio;
-    }
-
-    public TipoOperacion getTipoOperacion() {
-        return tipoOperacion;
-    }
-
-    public void setTipoOperacion(TipoOperacion tipoOperacion) {
-        this.tipoOperacion = tipoOperacion;
     }
 
     public int getAmbientes() {
@@ -162,13 +147,6 @@ public abstract class Propiedad {
         return dormitorios;
     }
 
-    public double getSuperficieDescubierta() {
-        return superficieDescubierta;
-    }
-
-    public void setSuperficieDescubierta(double superficieDescubierta) {
-        this.superficieDescubierta = superficieDescubierta;
-    }
 
     public double getSuperficieCubierta() {
         return superficieCubierta;
@@ -214,13 +192,6 @@ public abstract class Propiedad {
         this.fechaPublicacion = fechaPublicacion;
     }
 
-    public Cliente getPropietario() {
-        return propietario;
-    }
-
-    public void setPropietario(Cliente propietario) {
-        this.propietario = propietario;
-    }
 
     public EstadoPublicacion getEstado() {
         return estado;
@@ -238,28 +209,19 @@ public abstract class Propiedad {
         this.estadoConservacion = estadoConservacion;
     }
 
-    public double getSuperficieTotal() {
-        return superficieTotal;
+    public double getTerreno() {
+        return terreno;
     }
 
-    public void setSuperficieTotal(double superficieTotal) {
-        this.superficieTotal = superficieTotal;
+    public void setTerreno(double terreno) {
+        this.terreno = terreno;
     }
 
-    public boolean isOcupacion() {
-        return ocupacion;
-    }
-
-    public void setOcupacion(boolean ocupacion) {
-        this.ocupacion = ocupacion;
-    }
-
-    public double calcularPrecioPorZona(){
+    public double calcularPrecioPorZona() {
         double precio_base_zona;
         precio_base_zona = getZona().getMetros_cubiertos_zona() * getSuperficieCubierta();
-        return  precio_base_zona;
+        return precio_base_zona;
     }
-
 
     // Porcentaje que comparten todas las propiedades:
     // estado de conservacion, antiguedad y ambientes.
@@ -283,7 +245,6 @@ public abstract class Propiedad {
         if (getAmbientes() > 1) {
             porcentaje += (getAmbientes() - 1) * 2;
         }
-
         return porcentaje;
     }
 
@@ -293,39 +254,35 @@ public abstract class Propiedad {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Propiedad propiedad = (Propiedad) o;
-        return direccionNumero == propiedad.direccionNumero && Objects.equals(direccionCalle, propiedad.direccionCalle) && Objects.equals(propietario, propiedad.propietario);
+        return direccionNumero == propiedad.direccionNumero && Objects.equals(direccionCalle, propiedad.direccionCalle);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(direccionCalle, direccionNumero, propietario);
+        return Objects.hash(direccionCalle, direccionNumero);
     }
 
     @Override
     public String toString() {
         return "Propiedad{" +
-                "id='" + id + '\'' +
-                ", titulo='" + titulo + '\'' +
+                "id=" + id +
+                ", tipoPropiedad=" + tipoPropiedad +
                 ", descripcion='" + descripcion + '\'' +
+                ", zona=" + zona +
                 ", direccionCalle='" + direccionCalle + '\'' +
                 ", direccionNumero=" + direccionNumero +
-                ", localidad='" + localidad + '\'' +
-                ", precio=USD " + precio +
+                ", precio=" + precio +
                 ", balcon=" + balcon +
-                ", tipoOperacion=" + tipoOperacion +
                 ", ambientes=" + ambientes +
                 ", dormitorios=" + dormitorios +
                 ", banios=" + banios +
                 ", cochera=" + cochera +
                 ", anioConstruccion=" + anioConstruccion +
                 ", fechaPublicacion=" + fechaPublicacion +
-                ", propietario=" + propietario +
                 ", estado=" + estado +
                 ", estadoConservacion=" + estadoConservacion +
-                ", superficieTotal=" + superficieTotal +
-                ", superficieDescubierta=" + superficieDescubierta +
+                ", terreno=" + terreno +
                 ", superficieCubierta=" + superficieCubierta +
-                ", ocupacion=" + ocupacion +
                 '}';
     }
 }
