@@ -8,12 +8,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import Enums.TipoUsuario;
-import Modelo.Administrador;
-import Modelo.Cliente;
-import Modelo.ProductorDeVenta;
+import enums.TipoUsuario;
+import modelo.Administrador;
+import modelo.Cliente;
+import modelo.ProductorDeVenta;
 import config.Conexion;
-import Modelo.Usuario;
+import modelo.Usuario;
 
 public class UsuariosDAO {
 

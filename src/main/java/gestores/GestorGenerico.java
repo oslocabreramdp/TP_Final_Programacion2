@@ -1,4 +1,9 @@
-package Gestores;
+package gestores;
+
+import interfaces.Identificable;
+import interfaces.UsoGestorGenerico;
+import excepciones.ElementoDuplicadoException;
+import excepciones.ElementoNoEncontradoException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +28,9 @@ public class GestorGenerico<T extends Identificable> {
         return new ArrayList<>(lista);
     }
 
-    public void agregarElemento(T elemento) throws ElementoDuplicadoExpection {
+    public void agregarElemento(T elemento) throws  ElementoDuplicadoException{
         if (existe(elemento.getId())) {
-            throw new ElementoDuplicadoExpection("Ya existe un elemento con id " + elemento.getId());
+            throw new ElementoDuplicadoException("Ya existe un elemento con id " + elemento.getId());
         }
         lista.add(elemento);
     }

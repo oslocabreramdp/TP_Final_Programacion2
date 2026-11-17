@@ -1,7 +1,7 @@
-package Modelo;
-import Enums.EstadoConservacion;
-import Enums.TipoPropiedad;
-import Enums.Zona;
+package modelo;
+import enums.EstadoConservacion;
+import enums.TipoPropiedad;
+import enums.Zona;
 
 public class Chalet extends Propiedad{
 
@@ -20,10 +20,10 @@ public class Chalet extends Propiedad{
     }
 
     public Chalet(TipoPropiedad tipoPropiedad, String descripcion, Zona zona, String direccionCalle, int direccionNumero,
-                  boolean balcon, int ambientes, int banios, boolean cochera, int anioConstruccion,
+                  boolean balcon, int ambientes, int dormitorios, int banios, boolean cochera, int anioConstruccion,
                   EstadoConservacion estadoConservacion, double terreno, double superficieCubierta, int cantPisos,
                   boolean pileta, boolean quincho, boolean jardin) {
-        super(tipoPropiedad, descripcion, zona, direccionCalle, direccionNumero, balcon, ambientes, banios, cochera, anioConstruccion, estadoConservacion, terreno, superficieCubierta);
+        super(tipoPropiedad, descripcion, zona, direccionCalle, direccionNumero, balcon, ambientes, dormitorios, banios, cochera, anioConstruccion, estadoConservacion, terreno, superficieCubierta);
         this.cantPisos = cantPisos;
         this.pileta = pileta;
         this.quincho = quincho;

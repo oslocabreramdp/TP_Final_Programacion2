@@ -1,10 +1,11 @@
-package Modelo;
-import Enums.TipoUsuario;
+package modelo;
+import interfaces.Identificable;
+import enums.TipoUsuario;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-public abstract class Usuario {
+public abstract class Usuario implements Identificable {
 
 
 

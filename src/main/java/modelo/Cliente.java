@@ -1,6 +1,6 @@
-package Modelo;
+package modelo;
 
-import Enums.TipoUsuario;
+import enums.TipoUsuario;
 
 import java.time.LocalDate;
 

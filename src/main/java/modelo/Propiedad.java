@@ -1,20 +1,23 @@
-package Modelo;
-import Enums.EstadoConservacion;
-import Enums.EstadoPublicacion;
-import Enums.TipoPropiedad;
-import Enums.Zona;
+package modelo;
+import enums.EstadoConservacion;
+import enums.EstadoPublicacion;
+import enums.TipoPropiedad;
+import enums.Zona;
+import interfaces.Identificable;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-public abstract class Propiedad {
+public abstract class Propiedad implements Identificable {
     private int id;
+    // por ahora el id lo pone este contador. despues se saca cuando
+    // la base de datos ponga el id sola con el auto_increment
+    private static int contador = 1;
     private TipoPropiedad tipoPropiedad;
     private String descripcion;
     private Zona zona;
     private String direccionCalle;
     private int direccionNumero;
-    private int precio;
     private boolean balcon;
     private int ambientes;
     private int dormitorios;
@@ -30,6 +33,7 @@ public abstract class Propiedad {
     //constructores
     public Propiedad(Zona zona, int direccionNumero, String direccionCalle, TipoPropiedad tipoPropiedad) {
 
+        this.id = contador++; // temporal, despues se saca
         this.tipoPropiedad = tipoPropiedad;
         this.descripcion = " ";
         this.zona = zona;
@@ -37,6 +41,7 @@ public abstract class Propiedad {
         this.direccionNumero = direccionNumero;
         this.balcon = false;
         this.ambientes = 1;
+        this.dormitorios = 0;
         this.banios = 1;
         this.cochera = false;
         this.anioConstruccion = 0;
@@ -45,12 +50,11 @@ public abstract class Propiedad {
         this.estadoConservacion = EstadoConservacion.NADA;
         this.terreno = 0;
         this.superficieCubierta = 0;
-        this.precio = (int) calcularPrecioFinal();
     }
 
-    public Propiedad(TipoPropiedad tipoPropiedad, String descripcion, Zona zona, String direccionCalle, int direccionNumero, boolean balcon, int ambientes, int banios,
+    public Propiedad(TipoPropiedad tipoPropiedad, String descripcion, Zona zona, String direccionCalle, int direccionNumero, boolean balcon, int ambientes, int dormitorios, int banios,
                      boolean cochera, int anioConstruccion, EstadoConservacion estadoConservacion, double terreno, double superficieCubierta) {
-        this.id = id;
+        this.id = contador++; // temporal, despues se saca
         this.tipoPropiedad = tipoPropiedad;
         this.descripcion = descripcion;
         this.zona = zona;
@@ -58,6 +62,7 @@ public abstract class Propiedad {
         this.direccionNumero = direccionNumero;
         this.balcon = balcon;
         this.ambientes = ambientes;
+        this.dormitorios = dormitorios;
         this.banios = banios;
         this.cochera = cochera;
         this.anioConstruccion = anioConstruccion;
@@ -66,7 +71,6 @@ public abstract class Propiedad {
         this.estadoConservacion = estadoConservacion;
         this.terreno = terreno;
         this.superficieCubierta = superficieCubierta;
-        this.precio = (int) calcularPrecioFinal();
     }
 
 
@@ -127,12 +131,9 @@ public abstract class Propiedad {
         this.direccionNumero = direccionNumero;
     }
 
+    // antes daba mal en el constructor, ahora lo calculo cuando lo pido
     public int getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(int precio) {
-        this.precio = precio;
+        return (int) calcularPrecioFinal();
     }
 
     public int getAmbientes() {
@@ -264,25 +265,20 @@ public abstract class Propiedad {
 
     @Override
     public String toString() {
-        return "Propiedad{" +
-                "id=" + id +
-                ", tipoPropiedad=" + tipoPropiedad +
-                ", descripcion='" + descripcion + '\'' +
-                ", zona=" + zona +
-                ", direccionCalle='" + direccionCalle + '\'' +
-                ", direccionNumero=" + direccionNumero +
-                ", precio=" + precio +
-                ", balcon=" + balcon +
-                ", ambientes=" + ambientes +
-                ", dormitorios=" + dormitorios +
-                ", banios=" + banios +
-                ", cochera=" + cochera +
-                ", anioConstruccion=" + anioConstruccion +
-                ", fechaPublicacion=" + fechaPublicacion +
-                ", estado=" + estado +
-                ", estadoConservacion=" + estadoConservacion +
-                ", terreno=" + terreno +
-                ", superficieCubierta=" + superficieCubierta +
-                '}';
-    }
+      return "ID: " + id +
+              "\nTipo: " + tipoPropiedad +
+              "\nDirección: " + direccionCalle + " " + direccionNumero +
+              "\nZona: " + zona +
+              "\nPrecio: USD " + getPrecio() +
+              "\nAmbientes: " + ambientes +
+              "\nDormitorios: " + dormitorios +
+              "\nBaños: " + banios +
+              "\nCochera: " + (cochera ? "Sí" : "No") +
+              "\nBalcón: " + (balcon ? "Sí" : "No") +
+              "\nSuperficie cubierta: " + superficieCubierta + " m²" +
+              "\nTerreno: " + terreno + " m²" +
+              "\nAño: " + anioConstruccion +
+              "\nConservación: " + estadoConservacion +
+              "\nEstado: " + estado;
+     }
 }

@@ -1,9 +1,9 @@
-package Modelo;
+package modelo;
 
-import Enums.Disposicion;
-import Enums.EstadoConservacion;
-import Enums.TipoPropiedad;
-import Enums.Zona;
+import enums.Disposicion;
+import enums.EstadoConservacion;
+import enums.TipoPropiedad;
+import enums.Zona;
 
 
 public class Departamento extends Propiedad{
@@ -24,9 +24,9 @@ public class Departamento extends Propiedad{
         this.disposicion = Disposicion.NINGUNA;
     }
 
-    public Departamento(TipoPropiedad tipoPropiedad, String descripcion, Zona zona, String direccionCalle, int direccionNumero, boolean balcon, int ambientes, int banios, boolean cochera, int anioConstruccion,
-                        EstadoConservacion estadoConservacion, double terreno, double superficieCubierta, String numeroDpto, int piso, int montoExpensa, boolean ascensor, boolean suite, boolean vistaAlMar, Disposicion disposicion) {
-        super(tipoPropiedad, descripcion, zona, direccionCalle, direccionNumero, balcon, ambientes, banios, cochera, anioConstruccion, estadoConservacion, terreno, superficieCubierta);
+    public Departamento(TipoPropiedad tipoPropiedad, String descripcion, Zona zona, String direccionCalle, int direccionNumero, boolean balcon, int ambientes, int dormitorios, int banios, boolean cochera, int anioConstruccion,
+                        EstadoConservacion estadoConservacion, double terreno, double superficieCubierta, String numeroDpto, int piso, boolean ascensor, boolean vistaAlMar, Disposicion disposicion) {
+        super(tipoPropiedad, descripcion, zona, direccionCalle, direccionNumero, balcon, ambientes, dormitorios, banios, cochera, anioConstruccion, estadoConservacion, terreno, superficieCubierta);
         this.numeroDpto = numeroDpto;
         this.piso = piso;
         this.ascensor = ascensor;
