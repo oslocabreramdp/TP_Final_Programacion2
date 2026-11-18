@@ -50,12 +50,19 @@ public class PropiedadesDAO {
                 String dispStr = rs.getString("disposicion");
                 Disposicion disposicion = dispStr != null ? Disposicion.valueOf(dispStr) : Disposicion.NINGUNA;
 
-                return new Departamento(
+                // -***- ESTE ES EL CAMBIO -***-
+                // antes se hacia return new Departamento(...) directo y se perdian el id, el estado
+                // y la fecha que vienen de la base (quedaba todo en TASACION y con el id del contador)
+                Departamento departamento = new Departamento(
                         TipoPropiedad.DEPARTAMENTO, descripcion, zona, direccionCalle, direccionNumero,
                         balcon, ambientes, dormitorios, banios, cochera, anioConstruccion,
                         estadoConservacion, terreno, superficieCubierta,
                         numeroDpto, piso, ascensor, vistaAlMar, disposicion
                 );
+                departamento.setId(id);
+                departamento.setEstado(estado);
+                departamento.setFechaPublicacion(fechaPublicacion);
+                return departamento;
 
             case CHALET:
                 int cantPisos = rs.getInt("cantidad_pisos");
@@ -63,12 +70,17 @@ public class PropiedadesDAO {
                 boolean quincho = rs.getBoolean("quincho");
                 boolean jardin = rs.getBoolean("jardin");
 
-                return new Chalet(
+                // -***- ESTE ES EL CAMBIO -***- (lo mismo que en departamento)
+                Chalet chalet = new Chalet(
                         TipoPropiedad.CHALET, descripcion, zona, direccionCalle, direccionNumero,
                         balcon, ambientes, dormitorios, banios, cochera, anioConstruccion,
                         estadoConservacion, terreno, superficieCubierta,
                         cantPisos, pileta, quincho, jardin
                 );
+                chalet.setId(id);
+                chalet.setEstado(estado);
+                chalet.setFechaPublicacion(fechaPublicacion);
+                return chalet;
 
             default:
                 throw new SQLException("Tipo de propiedad desconocido en la base de datos: " + tipoStr);
@@ -235,6 +247,17 @@ public class PropiedadesDAO {
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, nuevoEstado.name());
             ps.setInt(2, idPropiedad);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    // -***- ESTE ES EL CAMBIO -***-
+    // borra la propiedad de la base (lo usa el administrador en la parte grafica)
+    public boolean eliminar(int idPropiedad) throws SQLException {
+        String sql = "DELETE FROM propiedades WHERE id_propiedad = ?";
+        try (Connection con = Conexion.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idPropiedad);
             return ps.executeUpdate() > 0;
         }
     }

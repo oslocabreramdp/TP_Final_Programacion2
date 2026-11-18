@@ -20,6 +20,12 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>26.7.0</version>
         </dependency>
+        <!-- -***- ESTE ES EL CAMBIO -***- (JavaFX para la parte grafica) -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>21.0.13</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -30,6 +36,15 @@
                     <source>21</source>
                     <target>21</target>
                     <compilerArgs>--enable-preview</compilerArgs>
+                </configuration>
+            </plugin>
+            <!-- -***- ESTE ES EL CAMBIO -***- (para correr la parte grafica con mvn javafx:run) -->
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <configuration>
+                    <mainClass>vista.Lanzador</mainClass>
                 </configuration>
             </plugin>
         </plugins>
