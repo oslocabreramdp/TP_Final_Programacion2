@@ -68,7 +68,7 @@ public class Menu {
             String clave = sc.nextLine();
 
             try {
-                Usuario usuario = usuariosDAO.buscarPorMail(mail);
+                Usuario usuario = usuariosDAO.buscarPorEmail(mail);
                 if (usuario == null) {
                     System.out.println("Usuario no encontrado");
                 } else if (!usuario.isActivo()) {
