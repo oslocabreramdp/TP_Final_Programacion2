@@ -87,24 +87,15 @@ public class GestorPropiedades extends GestorGenerico<Propiedad> {
         return resultado;
     }
 
-    public List<Chalet> listarChalets() {
-        List<Chalet> chalets = new ArrayList<>();
+    // en castear al tipo definido en el menu, despues lo arreglo
+    public List<Propiedad> listarTipo(TipoPropiedad tipoPropiedad) {
+        List<Propiedad> chalets = new ArrayList<>();
         for (Propiedad p : listar()) {
             if (p instanceof Chalet) {
                 chalets.add((Chalet) p);
             }
         }
         return chalets;
-    }
-
-    public List<Departamento> listarDepartamentos() {
-        List<Departamento> departamentos = new ArrayList<>();
-        for (Propiedad p : listar()) {
-            if (p instanceof Departamento) {
-                departamentos.add((Departamento) p);
-            }
-        }
-        return departamentos;
     }
 
     public void cambiarEstado(int id, EstadoPublicacion nuevoEstado) throws ElementoNoEncontradoException {

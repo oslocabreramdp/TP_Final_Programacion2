@@ -109,7 +109,7 @@ public class UsuariosDAO {
             }
         }
         return false;
-        }
+    }
 
 
     public boolean actualizar(Usuario usuario) throws SQLException {
