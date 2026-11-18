@@ -55,6 +55,25 @@ public class UsuariosDAO {
         }
     }
 
+    public Usuario buscarPorMail(String mail) throws SQLException {
+
+        String sql = "SELECT * FROM usuarios WHERE email = ?";
+
+        try (Connection con = Conexion.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, mail);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return mapear(rs);
+            }
+
+            return  null;
+
+        }
+    }
+
 
 
     public boolean insertar(Usuario usuario) throws SQLException {
