@@ -82,7 +82,15 @@ INSERT INTO usuarios (tipo_usuario, nombre, apellido, telefono, email, pass_hash
 ('PRODUCTOR_DE_VENTA', 'Carla',   'Benitez',  '223-5550303', 'cbenitez@inmobiliaria.com','03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', false, '2026-11-10', NULL, '27-35444555-6', 0, 0.00),
 ('CLIENTE',            'Jorge',   'Paredes',  '223-5550404', 'jparedes@mail.com',        '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', true,  '2026-10-20', NULL, '28111222',      NULL, NULL),
 ('CLIENTE',            'Sofia',   'Lucero',   '223-5550505', 'slucero@mail.com',         '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', true,  '2026-11-02', NULL, '35999888',      NULL, NULL),
-('CLIENTE',            'Ramiro',  'Acosta',   '223-5550606', 'racosta@mail.com',         '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', true,  '2026-11-12', NULL, '40123456',      NULL, NULL);
+('CLIENTE',            'Ramiro',  'Acosta',   '223-5550606', 'racosta@mail.com',         '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', true,  '2026-11-12', NULL, '40123456',      NULL, NULL),
+('PRODUCTOR_DE_VENTA', 'Luciano', 'Mendez',   '223-5550707', 'lmendez@inmobiliaria.com', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', true,  '2026-10-10', NULL, '20-28333444-1', 7, 785000.00),
+('PRODUCTOR_DE_VENTA', 'Valeria', 'Duarte',   '223-5550808', 'vduarte@inmobiliaria.com',  '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', true,  '2026-10-12', NULL, '27-32111222-4', 2, 195000.00),
+('PRODUCTOR_DE_VENTA', 'Marcos',  'Sosa',     '223-5550909', 'msosa@inmobiliaria.com',    '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', true,  '2026-10-18', NULL, '20-37444555-9', 5, 520000.00),
+('PRODUCTOR_DE_VENTA', 'Natalia', 'Gimenez',  '223-5551010', 'ngimenez@inmobiliaria.com','03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', true,  '2026-10-25', NULL, '27-39111222-5', 1,  89000.00),
+('PRODUCTOR_DE_VENTA', 'Federico','Blanco',   '223-5551111', 'fblanco@inmobiliaria.com',  '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', true,  '2026-11-01', NULL, '20-33555666-8', 3, 310000.00);
+
+
+
 
 -- ---------------------------------------------------------------------
 --  DATOS DE PRUEBA - PROPIEDADES
@@ -109,5 +117,20 @@ INSERT INTO propiedades (tipo_propiedad, descripcion, zona, direccion_calle, dir
 ('DEPARTAMENTO', 'Monoambiente en Centro', 'CENTRO', 'Rivadavia', 2780, 37800, false, 1, 0, 1, false, 1965, '2026-10-20', 'VENDIDA', 'A_RECICLAR', 0.00, 28.00, 'C', 3, true, false, 'INTERNO', NULL, NULL, NULL, NULL),
 ('CHALET', 'Casa en Constitucion', 'NORTE', 'Av. Constitucion', 5200, 203280, false, 4, 3, 2, true, 2010, '2026-11-09', 'DISPONIBLE', 'MUY_BUENO', 300.00, 140.00, NULL, NULL, NULL, NULL, NULL, 2, true, true, true),
 ('DEPARTAMENTO', 'Departamento en Constitucion', 'NORTE', 'Av. Constitucion', 4800, 81000, true, 2, 1, 1, true, 2020, '2026-11-13', 'DISPONIBLE', 'EXCELENTE', 0.00, 50.00, 'D', 3, true, false, 'LATERAL', NULL, NULL, NULL, NULL),
-('CHALET', 'Casa en Parque Luro', 'NORTE', 'Padre Cardiel', 1200, 112800, false, 3, 2, 1, true, 1998, '2026-11-16', 'TASACION', 'BUENO', 250.00, 100.00, NULL, NULL, NULL, NULL, NULL, 1, false, true, true);
+('CHALET', 'Casa en Parque Luro', 'NORTE', 'Padre Cardiel', 1200, 112800, false, 3, 2, 1, true, 1998, '2026-11-16', 'TASACION', 'BUENO', 250.00, 100.00, NULL, NULL, NULL, NULL, NULL, 1, false, true, true),
+('CHALET', 'Segundo Chalet en Alfar', 'SUR', 'Castilla y Leon', 1140, 91000, false, 3, 2, 2, true, 2002, '2026-11-18', 'DISPONIBLE', 'MUY_BUENO', 120.00, 95.00, NULL, NULL, NULL, NULL, NULL, 1, true, false, true),
+('CHALET', 'Chalet sobre Giacobini', 'SUR', 'Giacobini', 2410, 88000, false, 2, 1, 1, false, 1990, '2026-11-15', 'DISPONIBLE', 'BUENO', 100.00, 70.00, NULL, NULL, NULL, NULL, NULL, 1, false, false, true),
+('DEPARTAMENTO', 'Depto 2 ambientes en Zona Sur', 'SUR', 'Pacheco', 2150, 33000, true, 2, 1, 1, false, 1992, '2026-11-16', 'DISPONIBLE', 'BUENO', 0.00, 42.00, '12', 1, false, false, 'FRENTE', NULL, NULL, NULL, NULL),
+('DEPARTAMENTO', 'Monoambiente céntrico', 'CENTRO', 'San Martin', 1820, 41000, false, 1, 0, 1, false, 1988, '2026-11-14', 'DISPONIBLE', 'BUENO', 0.00, 30.00, '2', 2, false, false, 'INTERNO', NULL, NULL, NULL, NULL),
+('DEPARTAMENTO', 'Amplio piso en calle Roca', 'CENTRO', 'Roca', 2250, 98000, true, 4, 3, 2, true, 2011, '2026-11-10', 'DISPONIBLE', 'EXCELENTE', 0.00, 110.00, 'B', 4, true, false, 'FRENTE', NULL, NULL, NULL, NULL),
+('DEPARTAMENTO', 'Depto frente a la plaza', 'CENTRO', 'San Martin', 3010, 62000, true, 3, 2, 1, false, 1995, '2026-11-05', 'RESERVADA', 'MUY_BUENO', 0.00, 65.00, '4A', 4, true, false, 'FRENTE', NULL, NULL, NULL, NULL),
+('CHALET', 'Chalet en Constitución Norte', 'NORTE', 'Av. Constitucion', 6100, 240000, false, 5, 4, 3, true, 2019, '2026-11-12', 'DISPONIBLE', 'EXCELENTE', 450.00, 210.00, NULL, NULL, NULL, NULL, NULL, 2, true, true, true),
+('DEPARTAMENTO', 'Duplex en Constitución', 'NORTE', 'Av. Constitucion', 3900, 95000, true, 3, 2, 2, true, 2021, '2026-11-17', 'DISPONIBLE', 'EXCELENTE', 0.00, 80.00, '101', 1, true, true, 'FRENTE', NULL, NULL, NULL, NULL),
+('CHALET', 'Casa familiar en Parque Luro', 'NORTE', 'Padre Cardiel', 1550, 129000, false, 4, 3, 2, true, 2004, '2026-11-11', 'DISPONIBLE', 'MUY_BUENO', 300.00, 125.00, NULL, NULL, NULL, NULL, NULL, 1, false, true, true),
+('DEPARTAMENTO', 'Monoambiente zona norte', 'NORTE', 'Av. Constitucion', 4200, 48000, false, 1, 0, 1, false, 2015, '2026-11-03', 'DISPONIBLE', 'MUY_BUENO', 0.00, 32.00, '3C', 3, true, false, 'CONTRA_FRENTE', NULL, NULL, NULL, NULL),
+('DEPARTAMENTO', 'Departamento 2 ambientes centro', 'CENTRO', 'Roca', 1500, 52000, true, 2, 1, 1, false, 1982, '2026-11-07', 'DISPONIBLE', 'BUENO', 0.00, 48.00, '7B', 7, true, false, 'LATERAL', NULL, NULL, NULL, NULL),
+('CHALET', 'Chalet clásico zona sur', 'SUR', 'Giacobini', 2180, 107000, false, 3, 2, 1, true, 1985, '2026-10-30', 'DISPONIBLE', 'BUENO', 180.00, 92.00, NULL, NULL, NULL, NULL, NULL, 1, false, true, true),
+('DEPARTAMENTO', 'Depto 3 ambientes sur', 'SUR', 'Pacheco', 2300, 45000, true, 3, 2, 1, false, 1994, '2026-11-02', 'DISPONIBLE', 'BUENO', 0.00, 60.00, '14', 3, false, false, 'FRENTE', NULL, NULL, NULL, NULL),
+('CHALET', 'Casa amplia en Alfar', 'SUR', 'Castilla y Leon', 850, 79000, false, 2, 1, 1, false, 1990, '2026-10-28', 'TASACION', 'A_RECICLAR', 200.00, 68.00, NULL, NULL, NULL, NULL, NULL, 1, false, false, true),
+('DEPARTAMENTO', 'Depto céntrico San Martín', 'CENTRO', 'San Martin', 2100, 59000, true, 2, 1, 1, false, 1976, '2026-11-06', 'DISPONIBLE', 'BUENO', 0.00, 52.00, '8', 8, true, false, 'FRENTE', NULL, NULL, NULL, NULL);
 
