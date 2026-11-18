@@ -1,17 +1,14 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import dao.PropiedadesDAO;
 import dao.UsuariosDAO;
-import enums.EstadoPublicacion;
-import enums.TipoPropiedad;
-import enums.Zona;
+import enums.*;
 import excepciones.ElementoDuplicadoException;
 import excepciones.ElementoNoEncontradoException;
 import gestores.GestorPropiedades;
-import modelo.ProductorDeVenta;
-import modelo.Propiedad;
-import modelo.Usuario;
+import modelo.*;
 import utils.SecurityUtils;
 import java.sql.SQLException;
 public class Menu {
@@ -352,4 +349,260 @@ public class Menu {
             }
         }
     }
+
+
+
+    // carga una propiedad nueva (la pueden usar el administrador y el productor)
+    // la propiedad nueva queda en estado TASACION, despues se publica con la opcion de publicar
+    public void cargarPropiedad() {
+        System.out.println("CARGAR PROPIEDAD");
+
+        // 1) tipo de propiedad
+        System.out.println("Que tipo de propiedad es?");
+        System.out.println("1. DEPARTAMENTO");
+        System.out.println("2. CHALET");
+        int opcionTipo = leerNumeroEntre(1, 2);
+        TipoPropiedad tipo;
+        if (opcionTipo == 1) {
+            tipo = TipoPropiedad.DEPARTAMENTO;
+        } else {
+            tipo = TipoPropiedad.CHALET;
+        }
+
+        // 2) zona
+        System.out.println("En que zona esta?");
+        System.out.println("1. NORTE");
+        System.out.println("2. SUR");
+        System.out.println("3. CENTRO");
+        int opcionZona = leerNumeroEntre(1, 3);
+        Zona zona;
+        if (opcionZona == 1) {
+            zona = Zona.NORTE;
+        } else if (opcionZona == 2) {
+            zona = Zona.SUR;
+        } else {
+            zona = Zona.CENTRO;
+        }
+
+        // 3) direccion
+        System.out.println("Calle:");
+        String calle = leerTextoNoVacio();
+
+        System.out.println("Numero de la calle:");
+        int numero = leerNumeroEntre(1, 99999);
+
+        // 4) descripcion (esta puede quedar vacia)
+        System.out.println("Descripcion (si no queres poner nada apreta enter):");
+        String descripcion = sc.nextLine();
+        if (descripcion.isBlank()) {
+            descripcion = " ";
+        }
+
+        // 5) ambientes, dormitorios y banios
+        System.out.println("Cantidad de ambientes (de 1 a 8):");
+        int ambientes = leerNumeroEntre(1, 8);
+
+        // no puede tener mas dormitorios que ambientes
+        System.out.println("Cantidad de dormitorios (de 0 a " + ambientes + "):");
+        int dormitorios = leerNumeroEntre(0, ambientes);
+
+        System.out.println("Cantidad de banios (de 1 a 6):");
+        int banios = leerNumeroEntre(1, 6);
+
+        // 6) balcon y cochera
+        System.out.println("Tiene balcon? (s/n)");
+        boolean balcon = leerSiNo();
+
+        System.out.println("Tiene cochera? (s/n)");
+        boolean cochera = leerSiNo();
+
+        // 7) anio de construccion (no puede ser del futuro)
+        int anioActual = LocalDate.now().getYear();
+        System.out.println("Anio de construccion (de 1900 a " + anioActual + "):");
+        int anioConstruccion = leerNumeroEntre(1900, anioActual);
+
+        // 8) estado de conservacion
+        System.out.println("Estado de conservacion:");
+        System.out.println("1. EXCELENTE");
+        System.out.println("2. MUY BUENO");
+        System.out.println("3. BUENO");
+        System.out.println("4. A RECICLAR");
+        System.out.println("5. NO SE SABE");
+        int opcionEstado = leerNumeroEntre(1, 5);
+        EstadoConservacion estadoConservacion;
+        if (opcionEstado == 1) {
+            estadoConservacion = EstadoConservacion.EXCELENTE;
+        } else if (opcionEstado == 2) {
+            estadoConservacion = EstadoConservacion.MUY_BUENO;
+        } else if (opcionEstado == 3) {
+            estadoConservacion = EstadoConservacion.BUENO;
+        } else if (opcionEstado == 4) {
+            estadoConservacion = EstadoConservacion.A_RECICLAR;
+        } else {
+            estadoConservacion = EstadoConservacion.NADA;
+        }
+
+        // 9) superficies (la cubierta tiene que ser mayor a 0 porque con eso se calcula el precio)
+        System.out.println("Superficie cubierta en m2 (mayor a 0):");
+        double superficieCubierta = leerDecimalMayorA(0);
+
+        System.out.println("Terreno en m2 (si no tiene poner 0):");
+        double terreno = leerDecimalMayorOIgualA(0);
+
+        // 10) datos que dependen del tipo
+        Propiedad nueva;
+        if (tipo == TipoPropiedad.DEPARTAMENTO) {
+            System.out.println("Numero o letra del departamento (ej: 4B):");
+            String numeroDpto = leerTextoNoVacio();
+
+            System.out.println("Piso (de 0 a 100, 0 es planta baja):");
+            int piso = leerNumeroEntre(0, 100);
+
+            System.out.println("Tiene ascensor? (s/n)");
+            boolean ascensor = leerSiNo();
+
+            System.out.println("Tiene vista al mar? (s/n)");
+            boolean vistaAlMar = leerSiNo();
+
+            System.out.println("Disposicion:");
+            System.out.println("1. FRENTE");
+            System.out.println("2. CONTRA FRENTE");
+            System.out.println("3. LATERAL");
+            System.out.println("4. INTERNO");
+            System.out.println("5. NINGUNA");
+            int opcionDisposicion = leerNumeroEntre(1, 5);
+            Disposicion disposicion;
+            if (opcionDisposicion == 1) {
+                disposicion = Disposicion.FRENTE;
+            } else if (opcionDisposicion == 2) {
+                disposicion = Disposicion.CONTRA_FRENTE;
+            } else if (opcionDisposicion == 3) {
+                disposicion = Disposicion.LATERAL;
+            } else if (opcionDisposicion == 4) {
+                disposicion = Disposicion.INTERNO;
+            } else {
+                disposicion = Disposicion.NINGUNA;
+            }
+
+            // verifico que no este cargado el mismo departamento (misma calle, numero y depto)
+            for (Propiedad p : gestor.listar()) {
+                if (p instanceof Departamento) {
+                    Departamento d = (Departamento) p;
+                    if (d.getDireccionCalle().equalsIgnoreCase(calle)
+                            && d.getDireccionNumero() == numero
+                            && d.getNumeroDpto().equalsIgnoreCase(numeroDpto)) {
+                        System.out.println("Ese departamento ya esta cargado (id " + d.getId() + "), no se cargo de nuevo");
+                        return;
+                    }
+                }
+            }
+
+            nueva = new Departamento(tipo, descripcion, zona, calle, numero, balcon, ambientes, dormitorios, banios,
+                    cochera, anioConstruccion, estadoConservacion, terreno, superficieCubierta,
+                    numeroDpto, piso, ascensor, vistaAlMar, disposicion);
+
+        } else {
+            System.out.println("Cantidad de pisos (de 1 a 5):");
+            int cantPisos = leerNumeroEntre(1, 5);
+
+            System.out.println("Tiene pileta? (s/n)");
+            boolean pileta = leerSiNo();
+
+            System.out.println("Tiene quincho? (s/n)");
+            boolean quincho = leerSiNo();
+
+            System.out.println("Tiene jardin? (s/n)");
+            boolean jardin = leerSiNo();
+
+            // verifico que no este cargado el mismo chalet (misma calle y numero)
+            for (Propiedad p : gestor.listar()) {
+                if (p instanceof Chalet
+                        && p.getDireccionCalle().equalsIgnoreCase(calle)
+                        && p.getDireccionNumero() == numero) {
+                    System.out.println("Ese chalet ya esta cargado (id " + p.getId() + "), no se cargo de nuevo");
+                    return;
+                }
+            }
+
+            nueva = new Chalet(tipo, descripcion, zona, calle, numero, balcon, ambientes, dormitorios, banios,
+                    cochera, anioConstruccion, estadoConservacion, terreno, superficieCubierta,
+                    cantPisos, pileta, quincho, jardin);
+        }
+
+        // 11) muestro como quedo y pregunto si la guardo
+        System.out.println("------------------------------");
+        System.out.println(nueva);
+        System.out.println("------------------------------");
+        System.out.println("Guardar la propiedad? (s/n)");
+        boolean guardar = leerSiNo();
+        if (!guardar) {
+            System.out.println("No se guardo la propiedad");
+            return;
+        }
+
+        try {
+            gestor.agregarElemento(nueva);
+            System.out.println("Propiedad cargada con id " + nueva.getId() + ". Queda en TASACION hasta que se publique.");
+        } catch (ElementoDuplicadoException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    private int leerNumeroEntre(int minimo, int maximo) {
+        int numero = leerNumero();
+        while (numero < minimo || numero > maximo) {
+            System.out.println("El numero tiene que estar entre " + minimo + " y " + maximo + ", proba de nuevo:");
+            numero = leerNumero();
+        }
+        return numero;
+    }
+
+    private String leerTextoNoVacio() {
+        String texto = sc.nextLine();
+        while (texto.isBlank()) {
+            System.out.println("No puede estar vacio, escribi algo:");
+            texto = sc.nextLine();
+        }
+        return texto.trim();
+    }
+
+    private boolean leerSiNo() {
+        String respuesta = sc.nextLine();
+        while (!respuesta.equalsIgnoreCase("s") && !respuesta.equalsIgnoreCase("n")) {
+            System.out.println("Escribi s (si) o n (no):");
+            respuesta = sc.nextLine();
+        }
+        return respuesta.equalsIgnoreCase("s");
+    }
+
+    private double leerDecimal() {
+        while (true) {
+            String texto = sc.nextLine().replace(",", ".");
+            try {
+                return Double.parseDouble(texto);
+            } catch (NumberFormatException e) {
+                System.out.println("Ingreso una letra, por favor ingrese un numero (ej: 45.5):");
+            }
+        }
+    }
+
+    private double leerDecimalMayorA(double minimo) {
+        double numero = leerDecimal();
+        while (numero <= minimo) {
+            System.out.println("Tiene que ser mayor a " + minimo + ", proba de nuevo:");
+            numero = leerDecimal();
+        }
+        return numero;
+    }
+
+    private double leerDecimalMayorOIgualA(double minimo) {
+        double numero = leerDecimal();
+        while (numero < minimo) {
+            System.out.println("No puede ser menor a " + minimo + ", proba de nuevo:");
+            numero = leerDecimal();
+        }
+        return numero;
+    }
+
 }
