@@ -1,4 +1,6 @@
 package utils;
+import excepciones.ContraseniaInvalidaException;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -23,6 +25,18 @@ public class SecurityUtils {
 
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Error al hashear la contraseña", e);
+        }
+    }
+
+    public static void validarContrasenia(String clave) throws ContraseniaInvalidaException {
+        if (clave == null || clave.length() <= 8) {
+            throw new ContraseniaInvalidaException("La contraseña debe tener más de 8 caracteres.");
+        }
+        if (!clave.matches(".*\\d.*")) {
+            throw new ContraseniaInvalidaException("La contraseña debe contener al menos un número.");
+        }
+        if (!clave.matches(".*[A-Z].*")) {
+            throw new ContraseniaInvalidaException("La contraseña debe contener al menos una letra mayúscula.");
         }
     }
 }

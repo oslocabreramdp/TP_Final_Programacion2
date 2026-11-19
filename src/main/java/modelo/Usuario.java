@@ -110,6 +110,10 @@ public abstract class Usuario implements Identificable {
         return idUsuario;
     }
 
+
+    public void setId(int idUsuario) {
+        this.idUsuario = idUsuario;}
+
     @Override
     public String toString() {
         return "Usuario{" +

@@ -31,7 +31,7 @@ public class GestorUsuarios extends GestorGenerico<Usuario> {
                 throw new ElementoNoEncontradoException(id);
             }
             return u;
-        } catch (ElementoNoEncontradoException | SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException("Error en base de datos al buscar usuario por ID: " + e.getMessage(), e);
         }
     }

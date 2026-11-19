@@ -105,7 +105,8 @@ public class UsuariosDAO {
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = Conexion.obtenerConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             // 1) Pedir las claves autoincrementales generadas por MySQL
+             PreparedStatement ps = con.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
 
             // Parámetros comunes
             ps.setString(2, usuario.getNombre());
@@ -122,8 +123,6 @@ public class UsuariosDAO {
                 ps.setString(1, "ADMINISTRADOR");
                 ps.setString(9, admin.getLegajo());
 
-                // null explicitos
-
                 ps.setNull(10, java.sql.Types.VARCHAR);
                 ps.setNull(11, java.sql.Types.INTEGER);
                 ps.setNull(12, java.sql.Types.DECIMAL);
@@ -131,9 +130,7 @@ public class UsuariosDAO {
             } else if (usuario instanceof ProductorDeVenta) {
                 ProductorDeVenta productor = (ProductorDeVenta) usuario;
                 ps.setString(1, "PRODUCTOR_DE_VENTA");
-                // null explicito
                 ps.setNull(9, java.sql.Types.VARCHAR);
-                //
                 ps.setString(10, productor.getCuil());
                 ps.setInt(11, productor.getCantidadVentas());
                 ps.setBigDecimal(12, java.math.BigDecimal.valueOf(productor.getMontoVentas()));
@@ -141,16 +138,23 @@ public class UsuariosDAO {
             } else if (usuario instanceof Cliente) {
                 Cliente cliente = (Cliente) usuario;
                 ps.setString(1, "CLIENTE");
-                //null explicito
                 ps.setNull(9, java.sql.Types.VARCHAR);
-                //
                 ps.setString(10, cliente.getDni());
-                //null explicitos
                 ps.setNull(11, java.sql.Types.INTEGER);
                 ps.setNull(12, java.sql.Types.DECIMAL);
             }
 
-            return ps.executeUpdate() > 0;
+            // 2) Ejecutar y recuperar el ID generado antes de devolver true
+            int filasAfectadas = ps.executeUpdate();
+            if (filasAfectadas > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        usuario.setId(rs.getInt(1));
+                    }
+                }
+                return true;
+            }
+            return false;
         }
     }
 
