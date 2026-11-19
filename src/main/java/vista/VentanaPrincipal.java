@@ -1,11 +1,12 @@
 package vista;
 
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import modelo.Usuario;
 
-// Es la clase que extiende Application (como en la clase 19).
-// Tiene la ventana (Stage) y va cambiando la escena (Scene) segun la pantalla que toque.
+import java.net.URL;
+
 public class VentanaPrincipal extends Application {
 
     private Stage ventana;
@@ -14,23 +15,48 @@ public class VentanaPrincipal extends Application {
     public void start(Stage stage) {
         this.ventana = stage;
         ventana.setTitle("CUCHUFLITO PROPIEDADES");
+        ventana.setMinWidth(900);
+        ventana.setMinHeight(600);
         mostrarLogin();
         ventana.show();
     }
 
-    // pantalla de inicio de sesion
     public void mostrarLogin() {
         PantallaLogin login = new PantallaLogin(this);
-        ventana.setScene(login.crearEscena());
+        cambiarEscena(login.crearEscena());
+    }
+
+    public void mostrarRegistro() {
+        PantallaRegistro registro = new PantallaRegistro(this);
+        cambiarEscena(registro.crearEscena());
+    }
+
+    public void mostrarPropiedades(Usuario usuario) {
+        PantallaPropiedades pantalla = new PantallaPropiedades(this, usuario);
+        cambiarEscena(pantalla.crearEscena());
+    }
+
+    public void mostrarUsuarios(Usuario administrador) {
+        PantallaUsuarios pantalla = new PantallaUsuarios(this, administrador);
+        cambiarEscena(pantalla.crearEscena());
+    }
+
+    public void mostrarRanking(Usuario administrador) {
+        PantallaRanking pantalla = new PantallaRanking(this, administrador);
+        cambiarEscena(pantalla.crearEscena());
+    }
+
+    private void cambiarEscena(Scene escena) {
+        aplicarEstilos(escena);
+        ventana.setScene(escena);
         ventana.centerOnScreen();
     }
 
-    // pantalla con la tabla de propiedades
-    // si usuario es null es que entro sin cuenta (solo ve el catalogo)
-    public void mostrarPropiedades(Usuario usuario) {
-        PantallaPropiedades pantalla = new PantallaPropiedades(this, usuario);
-        ventana.setScene(pantalla.crearEscena());
-        ventana.centerOnScreen();
+    public static void aplicarEstilos(Scene escena) {
+        URL estilos = VentanaPrincipal.class.getResource("/vista/estilos.css");
+        if (estilos != null) {
+            escena.getStylesheets().add(estilos.toExternalForm());
+        }
     }
 
     public Stage getVentana() {

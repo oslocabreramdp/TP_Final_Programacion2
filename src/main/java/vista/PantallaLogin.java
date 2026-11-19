@@ -1,22 +1,21 @@
 package vista;
 
 import dao.UsuariosDAO;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import modelo.Usuario;
 import utils.SecurityUtils;
 
 import java.sql.SQLException;
 
-// Pantalla de inicio de sesion. Hace lo mismo que iniciarSecion() del Menu.
 public class PantallaLogin {
 
     private VentanaPrincipal principal;
@@ -31,54 +30,74 @@ public class PantallaLogin {
     }
 
     public Scene crearEscena() {
-        Label titulo = new Label("BIENVENIDO A CUCHUFLITO PROPIEDADES");
-        titulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        Label titulo = new Label("CUCHUFLITO");
+        titulo.getStyleClass().add("titulo-app");
 
+        Label subtitulo = new Label("PROPIEDADES  -  Ingresa a tu cuenta");
+        subtitulo.getStyleClass().add("subtitulo");
+
+        Label etiquetaMail = new Label("Mail");
+        etiquetaMail.getStyleClass().add("etiqueta-campo");
         campoMail = new TextField();
         campoMail.setPromptText("ejemplo@mail.com");
 
+        Label etiquetaClave = new Label("Clave");
+        etiquetaClave.getStyleClass().add("etiqueta-campo");
         campoClave = new PasswordField();
-        campoClave.setPromptText("clave");
+        campoClave.setPromptText("Tu clave");
+        campoClave.setOnAction(e -> iniciarSesion());
 
-        // mail y clave uno abajo del otro
-        GridPane grilla = new GridPane();
-        grilla.setHgap(10);
-        grilla.setVgap(10);
-        grilla.setAlignment(Pos.CENTER);
-        grilla.add(new Label("Mail:"), 0, 0);
-        grilla.add(campoMail, 1, 0);
-        grilla.add(new Label("Clave:"), 0, 1);
-        grilla.add(campoClave, 1, 1);
+        mensaje = new Label();
+        mensaje.getStyleClass().add("mensaje-error");
+        mensaje.setWrapText(true);
+        mensaje.setMaxWidth(300);
+        mensaje.setMinHeight(Region.USE_PREF_SIZE);
+        mensaje.visibleProperty().bind(mensaje.textProperty().isNotEmpty());
+        mensaje.managedProperty().bind(mensaje.textProperty().isNotEmpty());
 
         Button botonIngresar = new Button("Ingresar");
-        Button botonCatalogo = new Button("Ver catalogo sin cuenta");
-        Button botonSalir = new Button("Salir");
-
+        botonIngresar.getStyleClass().add("boton-principal");
+        botonIngresar.setMaxWidth(Double.MAX_VALUE);
+        botonIngresar.setDefaultButton(true);
         botonIngresar.setOnAction(e -> iniciarSesion());
-        // si aprieta enter en la clave tambien intenta entrar
-        campoClave.setOnAction(e -> iniciarSesion());
+
+        Button botonCatalogo = new Button("Ver catalogo sin cuenta");
+        botonCatalogo.setMaxWidth(Double.MAX_VALUE);
         botonCatalogo.setOnAction(e -> principal.mostrarPropiedades(null));
+
+        Label textoRegistro = new Label("No tenes cuenta?");
+        textoRegistro.getStyleClass().add("subtitulo");
+        Button botonRegistro = new Button("Registrate");
+        botonRegistro.getStyleClass().add("boton-link");
+        botonRegistro.setOnAction(e -> principal.mostrarRegistro());
+        HBox filaRegistro = new HBox(4, textoRegistro, botonRegistro);
+        filaRegistro.setAlignment(Pos.CENTER);
+
+        Button botonSalir = new Button("Salir");
+        botonSalir.getStyleClass().add("boton-link");
         botonSalir.setOnAction(e -> principal.getVentana().close());
 
-        HBox botones = new HBox(10, botonIngresar, botonCatalogo, botonSalir);
-        botones.setAlignment(Pos.CENTER);
+        VBox campos = new VBox(6, etiquetaMail, campoMail, etiquetaClave, campoClave);
 
-        // aca se muestran los errores en rojo
-        mensaje = new Label();
-        mensaje.setStyle("-fx-text-fill: red;");
+        VBox tarjeta = new VBox(14, titulo, subtitulo, campos, mensaje, botonIngresar, botonCatalogo, filaRegistro, botonSalir);
+        tarjeta.getStyleClass().add("tarjeta-login");
+        tarjeta.setAlignment(Pos.CENTER);
+        tarjeta.setMaxWidth(380);
+        tarjeta.setMaxHeight(VBox.USE_PREF_SIZE);
+        campos.setMaxWidth(300);
+        botonIngresar.setMaxWidth(300);
+        botonCatalogo.setMaxWidth(300);
 
-        VBox raiz = new VBox(20, titulo, grilla, botones, mensaje);
-        raiz.setAlignment(Pos.CENTER);
-        raiz.setPadding(new Insets(30));
+        StackPane raiz = new StackPane(tarjeta);
+        raiz.getStyleClass().add("fondo-login");
 
-        return new Scene(raiz, 520, 320);
+        return new Scene(raiz, 1000, 640);
     }
 
     private void iniciarSesion() {
         String mail = campoMail.getText().trim();
         String clave = campoClave.getText();
 
-        // verificaciones antes de ir a la base
         if (mail.isEmpty()) {
             mensaje.setText("Escribi el mail");
             return;
@@ -91,22 +110,19 @@ public class PantallaLogin {
         try {
             Usuario usuario = usuariosDAO.buscarPorEmail(mail);
             if (usuario == null) {
-                mensaje.setText("Usuario no encontrado");
+                mensaje.setText("No hay ningun usuario con ese mail");
                 return;
             }
             if (!usuario.isActivo()) {
-                mensaje.setText("El usuario esta dado de baja, habla con un administrador");
+                mensaje.setText("El usuario esta inactivo o pendiente de aprobacion. Habla con un administrador.");
                 return;
             }
             String claveHash = SecurityUtils.hashSHA256(clave);
             if (!claveHash.equals(usuario.getContraseniaHash())) {
-                mensaje.setText("La contrasenia esta mal");
+                mensaje.setText("La clave es incorrecta");
                 return;
             }
-
-            // entro bien, la pantalla de propiedades se arma segun el rol
             principal.mostrarPropiedades(usuario);
-
         } catch (SQLException e) {
             mensaje.setText("Error con la base de datos: " + e.getMessage());
         }
