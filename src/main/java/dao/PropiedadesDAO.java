@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +51,6 @@ public class PropiedadesDAO {
                 String dispStr = rs.getString("disposicion");
                 Disposicion disposicion = dispStr != null ? Disposicion.valueOf(dispStr) : Disposicion.NINGUNA;
 
-                // -***- ESTE ES EL CAMBIO -***-
-                // antes se hacia return new Departamento(...) directo y se perdian el id, el estado
-                // y la fecha que vienen de la base (quedaba todo en TASACION y con el id del contador)
                 Departamento departamento = new Departamento(
                         TipoPropiedad.DEPARTAMENTO, descripcion, zona, direccionCalle, direccionNumero,
                         balcon, ambientes, dormitorios, banios, cochera, anioConstruccion,
@@ -70,7 +68,6 @@ public class PropiedadesDAO {
                 boolean quincho = rs.getBoolean("quincho");
                 boolean jardin = rs.getBoolean("jardin");
 
-                // -***- ESTE ES EL CAMBIO -***- (lo mismo que en departamento)
                 Chalet chalet = new Chalet(
                         TipoPropiedad.CHALET, descripcion, zona, direccionCalle, direccionNumero,
                         balcon, ambientes, dormitorios, banios, cochera, anioConstruccion,
@@ -126,15 +123,14 @@ public class PropiedadesDAO {
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = Conexion.obtenerConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
+             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, propiedad.getTipoPropiedad().name());
             ps.setString(2, propiedad.getDescripcion());
             ps.setString(3, propiedad.getZona().name());
             ps.setString(4, propiedad.getDireccionCalle());
             ps.setInt(5, propiedad.getDireccionNumero());
-            ps.setInt(6, propiedad.getPrecio()); // Precio calculado en modelo
+            ps.setInt(6, propiedad.getPrecio());
             ps.setBoolean(7, propiedad.isBalcon());
             ps.setInt(8, propiedad.getAmbientes());
             ps.setInt(9, propiedad.getDormitorios());
@@ -147,7 +143,6 @@ public class PropiedadesDAO {
             ps.setBigDecimal(16, java.math.BigDecimal.valueOf(propiedad.getTerreno()));
             ps.setBigDecimal(17, java.math.BigDecimal.valueOf(propiedad.getSuperficieCubierta()));
 
-
             if (propiedad instanceof Departamento) {
                 Departamento dpto = (Departamento) propiedad;
                 ps.setString(18, dpto.getNumeroDpto());
@@ -156,7 +151,6 @@ public class PropiedadesDAO {
                 ps.setBoolean(21, dpto.isVistaAlMar());
                 ps.setString(22, dpto.getDisposicion().name());
 
-                // Null explicitos para CHALET
                 ps.setNull(23, java.sql.Types.INTEGER);
                 ps.setNull(24, java.sql.Types.BOOLEAN);
                 ps.setNull(25, java.sql.Types.BOOLEAN);
@@ -164,7 +158,6 @@ public class PropiedadesDAO {
 
             } else if (propiedad instanceof Chalet) {
                 Chalet chalet = (Chalet) propiedad;
-                // Null explicito para DEPARTAMENTO
                 ps.setNull(18, java.sql.Types.VARCHAR);
                 ps.setNull(19, java.sql.Types.INTEGER);
                 ps.setNull(20, java.sql.Types.BOOLEAN);
@@ -177,7 +170,16 @@ public class PropiedadesDAO {
                 ps.setBoolean(26, chalet.isJardin());
             }
 
-            return ps.executeUpdate() > 0;
+            int filas = ps.executeUpdate();
+            if (filas > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        propiedad.setId(rs.getInt(1));
+                    }
+                }
+                return true;
+            }
+            return false;
         }
     }
 
@@ -251,8 +253,6 @@ public class PropiedadesDAO {
         }
     }
 
-    // -***- ESTE ES EL CAMBIO -***-
-    // borra la propiedad de la base (lo usa el administrador en la parte grafica)
     public boolean eliminar(int idPropiedad) throws SQLException {
         String sql = "DELETE FROM propiedades WHERE id_propiedad = ?";
         try (Connection con = Conexion.obtenerConexion();
@@ -332,7 +332,6 @@ public class PropiedadesDAO {
         try (Connection con = Conexion.obtenerConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            // Asignamos los parámetros de manera segura para evitar SQL Injection
             ps.setDouble(1, precioMin);
             ps.setDouble(2, precioMax);
 
@@ -365,7 +364,6 @@ public class PropiedadesDAO {
         try (Connection con = Conexion.obtenerConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            // Concatenamos '%' para buscar coincidencias parciales de forma segura
             ps.setString(1, "%" + calle + "%");
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -376,8 +374,4 @@ public class PropiedadesDAO {
         }
         return lista;
     }
-
-
-
-
 }

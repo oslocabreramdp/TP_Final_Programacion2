@@ -511,13 +511,11 @@ public class Menu {
 
     private void cargarPropiedadesIniciales() {
         try {
-            for (Propiedad p : new dao.PropiedadesDAO().listarTodos()) {
-                gestorPropiedades.agregarElemento(p);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al cargar propiedades iniciales: " + e.getMessage());
+            gestorPropiedades.cargarDesdeBaseDeDatos();
         } catch (ElementoDuplicadoException e) {
             System.out.println(e.getMessage());
+        } catch (RuntimeException e) {
+            System.out.println("Error al cargar propiedades iniciales: " + e.getMessage());
         }
     }
 
@@ -631,6 +629,7 @@ public class Menu {
                 && !dominio.endsWith(".")
                 && !email.contains(" ");
     }
+
     private String leerDniValido() {
         while (true) {
             System.out.println("DNI (solo números, sin puntos ni letras):");
