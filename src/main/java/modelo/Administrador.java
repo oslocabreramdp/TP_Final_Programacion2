@@ -4,7 +4,7 @@ import enums.TipoUsuario;
 
 import java.time.LocalDate;
 
-public class Administrador extends Usuario {
+public class Administrador extends modelo.Usuario {
 
     private String legajo;
 

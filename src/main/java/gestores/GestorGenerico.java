@@ -1,4 +1,4 @@
-package Gestores;
+package gestores;
 
 import interfaces.Identificable;
 import interfaces.UsoGestorGenerico;

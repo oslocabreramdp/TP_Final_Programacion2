@@ -1,17 +1,21 @@
-package Gestores;
+package gestores;
 
 import dao.UsuariosDAO;
 import excepciones.ElementoNoEncontradoException;
 import excepciones.ElementoDuplicadoException;
+import modelo.Usuario;
+import modelo.ProductorDeVenta;
+import modelo.Propiedad;
+import modelo.Administrador;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class GestorUsuario extends GestorGenerico<modelo.Usuario> {
+public class GestorUsuario extends GestorGenerico<Usuario> {
     private final UsuariosDAO usuariosDAO;
     private final GestorPropiedades gestorPropiedades;
 
-    public GestorUsuarios(GestorPropiedades gestorPropiedades) {
+    public GestorUsuario(GestorPropiedades gestorPropiedades) {
         super();
         this.usuariosDAO = new UsuariosDAO();
         this.gestorPropiedades = gestorPropiedades;
@@ -19,7 +23,7 @@ public class GestorUsuario extends GestorGenerico<modelo.Usuario> {
 
 
     @Override
-    public modelo.Usuario buscarPorId(int id) throws ElementoNoEncontradoException {
+    public Usuario buscarPorId(int id) throws ElementoNoEncontradoException {
         try {
             modelo.Usuario u = usuariosDAO.buscarPorId(id);
             if (u == null) {
@@ -48,11 +52,11 @@ public class GestorUsuario extends GestorGenerico<modelo.Usuario> {
         modelo.Usuario admin = buscarPorId(idAdmin);
         modelo.Usuario candidato = buscarPorId(idProductor);
 
-        if (!(admin instanceof modelo.Administrador)) {
+        if (!(admin instanceof Administrador)) {
             throw new SecurityException("Solo un Administrador puede aprobar productores.");
         }
 
-        if (!(candidato instanceof modelo.ProductorDeVenta)) {
+        if (!(candidato instanceof ProductorDeVenta)) {
             throw new IllegalArgumentException("El usuario con ID " + idProductor + " no es un Productor de Venta.");
         }
 
@@ -66,7 +70,7 @@ public class GestorUsuario extends GestorGenerico<modelo.Usuario> {
     public void darAltaPropiedad(int idUsuario, modelo.Propiedad nuevaPropiedad) throws ElementoNoEncontradoException, SQLException, ElementoDuplicadoException {
         modelo.Usuario u = buscarPorId(idUsuario);
 
-        boolean esProductorAprobado = (u instanceof modelo.ProductorDeVenta) && u.isActivo();
+        boolean esProductorAprobado = (u instanceof ProductorDeVenta) && u.isActivo();
         boolean esAdmin = (u instanceof modelo.Administrador);
 
         if (esProductorAprobado || esAdmin) {
@@ -79,7 +83,7 @@ public class GestorUsuario extends GestorGenerico<modelo.Usuario> {
     public void darBajaPropiedad(int idUsuario, int idPropiedad) throws ElementoNoEncontradoException, SQLException {
         modelo.Usuario u = buscarPorId(idUsuario);
 
-        boolean esProductorAprobado = (u instanceof modelo.ProductorDeVenta) && u.isActivo();
+        boolean esProductorAprobado = (u instanceof ProductorDeVenta) && u.isActivo();
         boolean esAdmin = (u instanceof modelo.Administrador);
 
         if (esProductorAprobado || esAdmin) {
