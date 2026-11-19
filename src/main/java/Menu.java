@@ -158,6 +158,7 @@ public class Menu {
                 System.out.println("8. Eliminar propiedad");
                 System.out.println("9. Gestionar usuarios (listar / activar-desactivar cliente / aprobar productor)");
                 System.out.println("10. Ranking de productores de venta");
+                System.out.println("11. Filtrar propiedades por estado");
             }
             System.out.println("0. Cerrar sesión");
             op = leerNumero();
@@ -186,6 +187,8 @@ public class Menu {
                 menuGestionUsuarios((Administrador) usuario);
             } else if (op == 10 && esAdmin) {
                 menuRankingProductores();
+            } else if (op == 11 && esAdmin) {
+                filtrarPropiedadesPorEstado();
             } else {
                 System.out.println("Opción no válida para tu rol.");
             }
@@ -656,5 +659,43 @@ public class Menu {
 
     public static boolean esCuilValido(String cuil) {
         return cuil != null && cuil.matches("\\d{11}");
+    }
+
+    private void filtrarPropiedadesPorEstado() {
+        System.out.println("\n--- FILTRAR PROPIEDADES POR ESTADO ---");
+        System.out.println("1. DISPONIBLE");
+        System.out.println("2. NO_DISPONIBLE");
+        System.out.println("3. VENDIDA");
+        System.out.println("4. TASACION");
+        System.out.println("0. Volver");
+
+        int op = leerNumero();
+        if (op == 0) {
+            return;
+        }
+
+        EstadoPublicacion estadoBuscado = switch (op) {
+            case 1 -> EstadoPublicacion.DISPONIBLE;
+            case 2 -> EstadoPublicacion.NO_DISPONIBLE;
+            case 3 -> EstadoPublicacion.VENDIDA;
+            case 4 -> EstadoPublicacion.TASACION;
+            default -> {
+                System.out.println("Opción inválida.");
+                yield null;
+            }
+        };
+
+        if (estadoBuscado == null) {
+            return;
+        }
+
+        List<Propiedad> filtradas = new ArrayList<>();
+        for (Propiedad p : gestorPropiedades.listar()) {
+            if (p.getEstado() == estadoBuscado) {
+                filtradas.add(p);
+            }
+        }
+
+        mostrarPropiedades(filtradas);
     }
 }
