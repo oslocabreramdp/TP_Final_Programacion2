@@ -15,6 +15,6 @@ public class    Conexion {
 
     public static Connection obtenerConexion() throws SQLException {
 
-        return DriverManager.getConnection(URL, USUARIO, CLAVE);
+        return DriverManager.getConnection(URL, USUARIO, "omexpr1326");
     }
 }
