@@ -1,4 +1,3 @@
-// -***- ESTE ES EL CAMBIO -***- (archivo nuevo)
 package vista;
 
 import dao.PropiedadesDAO;

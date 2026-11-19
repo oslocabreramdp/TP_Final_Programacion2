@@ -5,6 +5,8 @@ import enums.EstadoConservacion;
 import enums.TipoPropiedad;
 import enums.Zona;
 
+import java.util.Objects;
+
 
 public class Departamento extends Propiedad{
 
@@ -103,6 +105,18 @@ public class Departamento extends Propiedad{
         return precioFinal;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Departamento that = (Departamento) o;
+        return piso == that.piso && Objects.equals(numeroDpto, that.numeroDpto);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), numeroDpto, piso);
+    }
 
     @Override
     public String toString() {
